@@ -1,27 +1,40 @@
-const express=require("express");
-const mongoose=require("mongoose")
-const cors=require("cors");
-const app=express();
-const PORT=process.env.PORT||3000;
+const express = require("express");
+const mongoose = require("mongoose")
+const cors = require("cors");
 
-if(process.env.NODE_ENV!="production"){
+
+
+//settings
+const app = express();
+const RegisterController = require("./controllers/RegisterController");
+//port
+const PORT = process.env.PORT || 8000;
+
+//environment
+if (process.env.NODE_ENV !== "production") {
 	require("dotenv").config();
 }
 app.use(cors());
 app.use(express.json());
+//middlewares
 
-app.get("/",(req, res)=>{
+//routes
+
+app.get("/", (req, res) => {
 	res.send("hello man");
 });
-try{
-	mongoose.connect(process.env.MONGO_DB_CONNECTION,{
-		useNewUrlParser:true,
-		useUnifiedTopology:true
-	})
-	console.log("MongoDB CONNECT OK")
-}catch(error){
-	console.log(error)
+app.post("/register", RegisterController.store);
+
+//database
+try {
+	mongoose.connect(process.env.MONGO_DB_CONNECTION, {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	});
+	console.log("MongoDB CONNECT OK");
+} catch (error) {
+	console.log(error);
 }
-app.listen(PORT,()=>{
+app.listen(PORT, () => {
 	console.log(`Listening on => ${PORT}`);
 })
