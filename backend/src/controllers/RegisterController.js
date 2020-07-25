@@ -28,7 +28,7 @@ module.exports = {
 		return res.json(user)
 		} catch (error) {
 			return res.status(400).json({ 
-				message: "User ID does not  exist! do you want to login instead?" });
+				message: "User ID does not  exist! do you want to register instead?" });
 		}
 	}
 }

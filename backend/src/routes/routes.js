@@ -8,5 +8,5 @@ routes.get("/", (req, res) => {
 });
 
 routes.post("/user/register",UserController.createUser);
-// routes.get("/user/:userId",UserController.getUserById);
+routes.get("/user/:userId",UserController.getUserById);
 module.exports=routes;
