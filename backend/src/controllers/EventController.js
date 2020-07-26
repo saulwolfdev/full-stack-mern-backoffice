@@ -1,5 +1,6 @@
-const Event = require("../models/Event");
-const User = require("../models/User");
+import Event from "../models/Event";
+import User from "../models/User";
+
 module.exports = {
 	async createEvent(req, res) {
 		const { title, description, price } = req.body;
@@ -16,6 +17,7 @@ module.exports = {
 			user: userId,
 			thumbnail: filename
 		});
-		return res.json(event)
+		console.log(event)
+		return res.json(event);
 	}
-}
+};
