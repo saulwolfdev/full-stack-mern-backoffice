@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const routes=require("./routes/routes");
+const path=require("path");
 const cors = require("cors");
 
 //settings
@@ -18,6 +19,10 @@ app.use(express.json());
 
 //routes
 app.use(routes);
+
+//static
+app.use("/files",express.static(path.resolve(__dirname,"..","files")));
+
 //database
 try {
 	mongoose.connect(process.env.MONGO_DB_CONNECTION, {
