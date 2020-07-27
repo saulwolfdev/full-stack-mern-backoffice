@@ -3,7 +3,7 @@ import User from "../models/User";
 
 module.exports = {
 	async createEvent(req, res) {
-		const { title, description, price } = req.body;
+		const { title, description, price, sport } = req.body;
 		const { user_id } = req.headers;
 		const { filename } = req.file;
 		const user = User.findById(user_id);
@@ -15,23 +15,22 @@ module.exports = {
 			description,
 			price: parseFloat(price),
 			user: user_id,
-			thumbnail: filename
+			thumbnail: filename,
+			sport
 		});
-		// console.log(event)
+		console.log(event)
 		return res.json(event);
 	},
-	async getEventById(req, res) {
+	async getDeleteEvents(req, res) {
 		const { eventId } = req.params;
-		
-	try {
-		const event = await Event.findById(eventId);
-		if (event) {
-			return res.json(event);
+		try {
+			await Event.findByIdAndDelete(eventId);
+			console.log("event, delete")
+			return res.status(204).json({ message: "Event deleted" });
+		} catch (error) {
+			return res.status(404).json({
+				message: "we do have any events with ID"
+			});
 		}
-	} catch (error) {
-		return res.status(400).json({message:"EventId does not exist"});
-	}
-		
-
 	}
 };
