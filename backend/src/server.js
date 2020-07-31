@@ -8,7 +8,7 @@ const cors = require("cors");
 const app = express();
 
 //port
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 7000;
 
 //environment
 if (process.env.NODE_ENV !== "production") {
