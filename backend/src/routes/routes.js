@@ -16,6 +16,7 @@ routes.get("/status", (req, res) => {
 
 //LOGIN
 routes.post("/login",LoginController.store);
+
 //DASHBOARD
 routes.get("/dashboard/:sport",DashboardController.getAllEvents);
 routes.get("/dashboard",DashboardController.getAllEvents);

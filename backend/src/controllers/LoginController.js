@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const user = require("../models/User");
+const User = require("../models/User");
 
 module.exports = {
 	async store(req, res) {
@@ -15,7 +15,9 @@ module.exports = {
 			if (user && await bcrypt.compare(password, user.password)) {
 				const userResponse = {
 					_id: user._id,
-					email: user.email
+					email: user.email,
+					firstName:user.firstName,
+					lastName:user.lastName
 				}
 				return res.json(userResponse);
 			} else {
