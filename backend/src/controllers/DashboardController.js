@@ -24,5 +24,5 @@ module.exports = {
 			return res.status(400).json({ message: "we do have any events yet" });
 		}
 	}
-}
+};
 

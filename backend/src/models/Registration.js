@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const RegistrationSchema = new mongoose.Schema({
 	date:String,
 	approved:Boolean,
-	// sport:String,
 		user: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "User"
@@ -16,3 +15,4 @@ const RegistrationSchema = new mongoose.Schema({
 
 });
 module.exports = mongoose.model("Registration", RegistrationSchema);
+  
