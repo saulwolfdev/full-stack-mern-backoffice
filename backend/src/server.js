@@ -10,18 +10,13 @@ const app = express();
 //port
 const PORT = process.env.PORT || 8000;
 
+app.use(cors());
+app.use(express.json());
+
 //environment
 if (process.env.NODE_ENV !== "production") {
 	require("dotenv").config();
 }
-app.use(cors());
-app.use(express.json());
-
-//routes
-app.use(routes);
-
-//static
-app.use("/files",express.static(path.resolve(__dirname,"..","files")));
 
 //database
 try {
@@ -33,6 +28,13 @@ try {
 } catch (error) {
 	console.log(error);
 }
+
+//static
+app.use("/files",express.static(path.resolve(__dirname,"..","files")));
+
+//routes
+app.use(routes);
+
 app.listen(PORT, () => {
 	console.log(`Listening on => ${PORT}`);
 })
