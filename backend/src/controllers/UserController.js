@@ -14,7 +14,12 @@ module.exports = {
 					password: hashedPassword,
 					email: email
 				});
-				return res.json(user);
+				return res.json({
+					_id:user._id,
+					firstName: user.firstName,
+					lastName: user.lastName,
+					email: user.email
+				});
 			}
 			return res.status(400).json({ message: "email/user already exist! do you want to login instead?" });
 		} catch (error) {
