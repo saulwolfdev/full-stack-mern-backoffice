@@ -24,7 +24,7 @@ const Login = ({ history }) => {
 	return (
 		<Fragment>
 			<Container>
-				<h2>Login:</h2>
+				<h2>Login</h2>
 				<p>Please <strong>Login</strong> into your account</p>
 				<Form onSubmit={handleSubmit}>
 					<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
