@@ -25,3 +25,9 @@ label#thumbnail.has-thumbnail img {
 .container > .event-validation {
     margin-top: 12px;
 }
+.event-validation-false{
+	background-color: rgb(60, 255, 0);
+}
+.event-validation-true{
+	background-color: rgb(255, 0, 0);
+}
