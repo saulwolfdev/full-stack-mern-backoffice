@@ -1,17 +1,17 @@
 import React, { Fragment, useState, useMemo } from "react";
 import api from "../../services/api";
 import camera from "../../assets/camera.png";
-import { Container, Button, Form, FormGroup, Input, Label} from "reactstrap";
+import { Container, Button, Form, FormGroup, Input, Label } from "reactstrap";
 import "./EventPage.css";
 const EventPage = () => {
-// const user_id = localStorage.getItem("user");
+  // const user_id = localStorage.getItem("user");
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
   const [price, setPrice] = useState();
   const [sport, setSport] = useState();
   const [thumbnail, setThumbnail] = useState(null);
   const [date, setDate] = useState();
-const [errormessage, setErrorMessage]=useState(false);
+  const [errormessage, setErrorMessage] = useState(false);
   const preview = useMemo(() => {
     return thumbnail ? URL.createObjectURL(thumbnail) : null;
   }, [thumbnail]);
@@ -41,13 +41,13 @@ const [errormessage, setErrorMessage]=useState(false);
         await api.post("/event", eventData, { headers: { user_id } });
         console.log("Event has been CREATED OK");
         console.log(eventData);
-      }else{
-		  setErrorMessage(true)
-		  setTimeout(()=>{
-			  setErrorMessage(false)
-		  },2000)
-		  console.log("Missing required data")
-	  }
+      } else {
+        setErrorMessage(true);
+        setTimeout(() => {
+          setErrorMessage(false);
+        }, 2000);
+        console.log("Missing required data");
+      }
     } catch (error) {
       Promise.reject(error);
       console.log("error in create event", error);
@@ -127,7 +127,13 @@ const [errormessage, setErrorMessage]=useState(false);
           </FormGroup>
           <Button>Submit</Button>
         </Form>
-			{errormessage?(<div className="event-validation" color="danger">Missing required information</div>):""}
+        {errormessage ? (
+          <div className="event-validation" color="danger">
+            Missing required information
+          </div>
+        ) : (
+          ""
+        )}
       </Container>
     </Fragment>
   );
