@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from "react";
 import api from "../../services/api";
 import { Container, Button, Form, FormGroup, Input } from "reactstrap";
+import "./form.css";
 const Login = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,19 +18,17 @@ const Login = ({ history }) => {
       if (userId) {
         localStorage.setItem("user", userId);
         history.push("/dashboard");
-		console.log("login OK")
+        console.log("login OK");
       } else {
         const { message } = response.data;
-			setError(true)
-			setErrorMessage(message)
-        setTimeout(()=>{
-			setError(false)
-			setErrorMessage("")
-		},2000)
+        setError(true);
+        setErrorMessage(message);
+        setTimeout(() => {
+          setError(false);
+          setErrorMessage("");
+        }, 2000);
       }
-    } catch (error) {
-
-	}
+    } catch (error) {}
   };
   return (
     <Fragment>
@@ -38,7 +37,15 @@ const Login = ({ history }) => {
         <p>
           Please <strong>Login</strong> into your account
         </p>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} className="form">
+          {error ? (
+            <div className="event-validation" color="danger">
+              {errormessage}
+            </div>
+          ) : (
+            ""
+          )}
+          <FormGroup className="form-group"></FormGroup>
           <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
             <Input
               type="email"
@@ -57,20 +64,16 @@ const Login = ({ history }) => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </FormGroup>
-		  <FormGroup>
-			   <Button className="submit-btn">Submit</Button>
-		  </FormGroup>
-				<FormGroup>
-			   <Button className="submit-btn"  onClick={() => history.push("/register")}>New Account</Button>
-		  </FormGroup>
+          <FormGroup>
+            <Button color="primary">Login</Button>
+            <Button
+            color="secondary"
+              onClick={() => history.push("/register")}
+            >
+              Register
+            </Button>
+          </FormGroup>
         </Form>
-        {error ? (
-          <div className="event-validation" color="danger">
-            ERROR LOGIN
-          </div>
-        ) : (
-          ""
-        )}
       </Container>
     </Fragment>
   );

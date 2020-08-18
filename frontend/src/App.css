@@ -17,6 +17,8 @@ body {
     background: rgba(0, 0, 0, 0.5) url("./assets/background.jpg") no-repeat;
     background-size: cover;
     -webkit-font-smoothing: antialiased !important;
+	position: relative;
+	z-index: -1;
 }
 
 body,

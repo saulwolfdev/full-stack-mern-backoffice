@@ -31,3 +31,22 @@ label#thumbnail.has-thumbnail img {
 .event-validation-true{
 	background-color: rgb(255, 0, 0);
 }
+.form{
+	background-color: black;
+	opacity: .7;
+	min-width: 500px;
+	padding:40px;
+	border-radius: 3px;
+	color:#fff;
+}
+.form input{
+	margin-bottom: 15px;
+	
+}
+.event-validation{
+	color:#fff;
+	font-size: 20px;
+}
+.btn{
+	margin-right: 15px;
+}

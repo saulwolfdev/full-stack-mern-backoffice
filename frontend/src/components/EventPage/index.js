@@ -3,7 +3,7 @@ import api from "../../services/api";
 import camera from "../../assets/camera.png";
 import { Container, Button, Form, FormGroup, Input, Label } from "reactstrap";
 import "./EventPage.css";
-const EventPage = () => {
+const EventPage = ({history}) => {
   // const user_id = localStorage.getItem("user");
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
@@ -11,7 +11,8 @@ const EventPage = () => {
   const [sport, setSport] = useState();
   const [thumbnail, setThumbnail] = useState(null);
   const [date, setDate] = useState();
-  const [errormessage, setErrorMessage] = useState(false);
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
   const preview = useMemo(() => {
     return thumbnail ? URL.createObjectURL(thumbnail) : null;
   }, [thumbnail]);
@@ -40,11 +41,14 @@ const EventPage = () => {
         console.log("Event has been SEND");
         await api.post("/event", eventData, { headers: { user_id } });
         console.log("Event has been CREATED OK");
-        console.log(eventData);
-      } else {
-        setErrorMessage(true);
+		setSuccess(true);
         setTimeout(() => {
-          setErrorMessage(false);
+          setSuccess(false);
+        }, 2000);
+      } else {
+        setError(true);
+        setTimeout(() => {
+          setError(false);
         }, 2000);
         console.log("Missing required data");
       }
@@ -61,7 +65,21 @@ const EventPage = () => {
         <p>
           Please <strong>Login</strong> into your account
         </p>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} className="form">
+          {error ? (
+            <div className="event-validation" color="danger">
+              Missing required information
+            </div>
+          ) : (
+            ""
+          )}
+			{success ? (
+            <div className="event-validation" color="danger">
+              The evente was created successfully
+            </div>
+          ) : (
+            ""
+          )}
           <FormGroup>
             <Label>Upload Image: </Label>
             <Label
@@ -125,15 +143,9 @@ const EventPage = () => {
               onChange={(e) => setDate(e.target.value)}
             />
           </FormGroup>
-          <Button>Submit</Button>
+          <Button color="primary">Submit</Button>
+		   <Button color="secondary" onClick={() => history.push("/dashboard")}>Dashboard</Button>
         </Form>
-        {errormessage ? (
-          <div className="event-validation" color="danger">
-            Missing required information
-          </div>
-        ) : (
-          ""
-        )}
       </Container>
     </Fragment>
   );
