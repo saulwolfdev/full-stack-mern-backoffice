@@ -2,6 +2,7 @@ import React, { Fragment, useState, useMemo } from "react";
 import api from "../../services/api";
 import camera from "../../assets/camera.png";
 import { Container, Button, Form, FormGroup, Input, Label } from "reactstrap";
+
 import "./EventPage.css";
 const EventPage = ({history}) => {
   // const user_id = localStorage.getItem("user");
@@ -26,6 +27,7 @@ const EventPage = ({history}) => {
     eventData.append("title", title);
     eventData.append("description", description);
     eventData.append("price", price);
+	eventData.append("sport", sport);
     eventData.append("thumbnail", thumbnail);
     eventData.append("date", date);
 
@@ -144,7 +146,7 @@ const EventPage = ({history}) => {
             />
           </FormGroup>
           <Button color="primary">Submit</Button>
-		   <Button color="secondary" onClick={() => history.push("/dashboard")}>Dashboard</Button>
+		   <Button color="secondary" onClick={() => history.push("/")}>Dashboard</Button>
         </Form>
       </Container>
     </Fragment>

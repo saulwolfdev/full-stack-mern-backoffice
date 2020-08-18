@@ -17,7 +17,7 @@ const Login = ({ history }) => {
     try {
       if (userId) {
         localStorage.setItem("user", userId);
-        history.push("/dashboard");
+        history.push("/");
         console.log("login OK");
       } else {
         const { message } = response.data;
@@ -28,7 +28,10 @@ const Login = ({ history }) => {
           setErrorMessage("");
         }, 2000);
       }
-    } catch (error) {}
+    } catch (error) {
+		 setError(true);
+        setErrorMessage("ERROR the server returned an error=> ",error);
+	}
   };
   return (
     <Fragment>

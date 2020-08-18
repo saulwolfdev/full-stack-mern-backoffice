@@ -29,7 +29,7 @@ const Register = ({ history }) => {
       const userId = response.data._id || false;
       if (userId) {
         localStorage.setItem("user", userId);
-        history.push("/dashboard");
+        history.push("/");
       } else {
         const { message } = response.data;
         console.log(message);
