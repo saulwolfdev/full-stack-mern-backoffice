@@ -14,17 +14,17 @@ import {
   ButtonGroup,
 } from "reactstrap";
 import api from "../../services/api";
-const Dashboard = () => {
+const Dashboard = ({history}) => {
   const [events, setEvents] = useState([]);
   const user_id = localStorage.getItem("user");
-   const [cSelected, setCSelected] = useState([]);
-    const [rSelected, setRSelected] = useState(null);
+//    const [cSelected, setCSelected] = useState([]);
+	const [rSelected, setSelected] = useState(null);
   useEffect(() => {
     getEvents();
   }, []);
 
  const filterHandler=(query)=>{
-	 setRSelected(query)
+	 setSelected(query)
 	 getEvents(query)
  }
   const getEvents = async (filter) => {
@@ -37,23 +37,24 @@ const Dashboard = () => {
     <Fragment>
       <Container>
 		<ButtonGroup>
-				<Button color="primary" onClick={() => filterHandler(null)} active={rSelected === null}>All Sports</Button>
-				<Button color="primary" onClick={() => filterHandler("running")} active={rSelected === 'running'}>Running</Button>
-				<Button color="primary" onClick={() => filterHandler("Hunter")} active={rSelected === 'Hunter'}>Hunter</Button>
-				<Button color="primary" onClick={() => filterHandler('flying')} active={rSelected === 'flying'}>Flying</Button>
+				<Button color="primary" onClick={() => filterHandler(null)} active={rSelected===null}>All Sports</Button>
+				<Button color="primary" onClick={() => filterHandler("remeras")} active={rSelected==="remeras"}>remeras</Button>
+				<Button color="primary" onClick={() => filterHandler("pantalones")} active={rSelected==="pantalones"}>pantalones</Button>
+				<Button color="primary" onClick={() => filterHandler("camisas")} active={rSelected==="camisas"}>camisas</Button>
+				<Button color="secondary" onClick={()=>history.push("event")}>Events</Button>
 		</ButtonGroup>
+		 
         <Row>
           {events.map((event) => {
             return (
               <Col key={event._id} sm="3">
-                <Card style={{ minHeight: "370px", marginBottom: "15px" }}>
+                <Card style={{marginBottom:"15px"}}>
                   <CardImg
                     top
                     width="100%"
-                    style={{ diplay: "block" }}
+                    style={{diplay:"block"}}
                     src={event.thumbnail_url}
-                    alt="Card image cap"
-                  />
+                    alt={event.title}/>
                   <CardBody>
                     <CardTitle>{event.title}</CardTitle>
                     <CardSubtitle>
@@ -62,7 +63,7 @@ const Dashboard = () => {
                     <CardText>{event.description}</CardText>
 					<CardText>{event.sport}</CardText>
                     <CardText>{moment(event.date).format("L")}</CardText>
-                    <Button>Pay</Button>
+                    <Button color="primary" style={{width:"100%"}}>Pay</Button>
                   </CardBody>
                 </Card>
               </Col>
