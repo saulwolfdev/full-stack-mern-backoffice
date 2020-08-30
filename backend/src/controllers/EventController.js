@@ -11,17 +11,21 @@ module.exports = {
 		if (!user) {
 			return res.status(400).json({ message: "User does not exist!" });
 		}
-		const event = await Event.create({
-			title,
-			description,
-			price: parseFloat(price),
-			user: user_id,
-			thumbnail: filename,
-			sport,
-			date
-		});
-		console.log("backend,=>",event);
-		return res.json(event);
+		try {
+            const event = await Event.create({
+                title,
+                description,
+                sport,
+                price: parseFloat(price),
+                user: user_id,
+                thumbnail: filename,
+                date
+            })
+
+            return res.json(event);
+        } catch (error) {
+            return res.status(400).json({ message: error })
+        }
 	},
 	async getDeleteEvents(req, res) {
 		const { eventId } = req.params;

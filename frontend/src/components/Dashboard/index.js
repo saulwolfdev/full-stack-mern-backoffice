@@ -14,6 +14,7 @@ import {
   ButtonGroup,
 } from "reactstrap";
 import api from "../../services/api";
+
 const Dashboard = ({history}) => {
   const [events, setEvents] = useState([]);
   const user_id = localStorage.getItem("user");
@@ -27,6 +28,11 @@ const Dashboard = ({history}) => {
 	 setSelected(query)
 	 getEvents(query)
  }
+  
+ const myEventsHandlers=(query)=>{
+  setSelected("myEvents")
+ }
+
   const getEvents = async (filter) => {
     const url = filter ? `/dashboard/${filter}` : "/dashboard";
     const response = await api.get(url, { headers: { user_id } });
@@ -41,6 +47,7 @@ const Dashboard = ({history}) => {
 				<Button color="primary" onClick={() => filterHandler("remeras")} active={rSelected==="remeras"}>remeras</Button>
 				<Button color="primary" onClick={() => filterHandler("pantalones")} active={rSelected==="pantalones"}>pantalones</Button>
 				<Button color="primary" onClick={() => filterHandler("camisas")} active={rSelected==="camisas"}>camisas</Button>
+        <Button color="primary" onClick={() => myEventsHandlers("camisas")} active={rSelected==="myEvents"}>my event</Button>
 				<Button color="secondary" onClick={()=>history.push("event")}>Events</Button>
 		</ButtonGroup>
 		 

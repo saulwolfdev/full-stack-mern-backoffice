@@ -1,33 +1,34 @@
 import React, { Fragment, useState, useMemo } from "react";
 import api from "../../services/api";
 import camera from "../../assets/camera.png";
-import { Container, Button, Form, FormGroup, Input, Label,ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
+import { Container, Button, Form, FormGroup, Input, Label, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
 
 import "./EventPage.css";
-const EventPage = ({ history }) => {
+export default function EventPage({ history }){
   // const user_id = localStorage.getItem("user");
-  const [title, setTitle] = useState();
-  const [description, setDescription] = useState();
-  const [price, setPrice] = useState();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
   const [sport, setSport] = useState("Sport");
   const [thumbnail, setThumbnail] = useState(null);
-  const [date, setDate] = useState();
+  const [date, setDate] = useState("");
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [dropdownOpen, setOpen] = useState(false);
 
-const [dropdownOpen, setOpen] = useState(false);
-const toggle = () => setOpen(!dropdownOpen);
+  const toggle = () => setOpen(!dropdownOpen);
 
   const preview = useMemo(() => {
     return thumbnail ? URL.createObjectURL(thumbnail) : null;
   }, [thumbnail]);
-  // console.log(title,description,price,sport,thumbnail,date)
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const user_id = localStorage.getItem("user");
 
     const eventData = new FormData();
+
     eventData.append("title", title);
     eventData.append("description", description);
     eventData.append("price", price);
@@ -49,7 +50,8 @@ const toggle = () => setOpen(!dropdownOpen);
         console.log("Event has been CREATED OK");
         setSuccess(true);
         setTimeout(() => {
-          setSuccess(false);
+          setSuccess(false)
+          history.push("/")
         }, 2000);
       } else {
         setError(true);
@@ -63,12 +65,11 @@ const toggle = () => setOpen(!dropdownOpen);
       console.log("error in create event", error);
     }
   };
-   
-   const sportEventHandler=(sport)=>{
-	   setSport(sport);
-	 
-   }
-     console.log("XXX",sport)
+
+  const sportEventHandler = (sport) => setSport(sport);
+
+
+  console.log("XXX", sport)
   return (
     <Fragment>
       <Container>
@@ -82,15 +83,15 @@ const toggle = () => setOpen(!dropdownOpen);
               Missing required information
             </div>
           ) : (
-            ""
-          )}
+              ""
+            )}
           {success ? (
             <div className="event-validation" color="danger">
               The evente was created successfully
             </div>
           ) : (
-            ""
-          )}
+              ""
+            )}
           <FormGroup>
             <Label>Upload Image: </Label>
             <Label
@@ -100,7 +101,7 @@ const toggle = () => setOpen(!dropdownOpen);
             >
               <Input
                 type="file"
-                onChange={(evt) => setThumbnail(evt.target.files[0])}
+                onChange={(e) => setThumbnail(e.target.files[0])}
               />
               <img
                 src={camera}
@@ -113,8 +114,9 @@ const toggle = () => setOpen(!dropdownOpen);
             <Label>Title</Label>
             <Input
               type="text"
-              name="title"
-              placeholder="Your title"
+              id="title"
+              value={title}
+              placeholder={"Your title"}
               onChange={(e) => setTitle(e.target.value)}
             />
           </FormGroup>
@@ -122,8 +124,9 @@ const toggle = () => setOpen(!dropdownOpen);
             <Label>Description</Label>
             <Input
               type="text"
-              name="description"
-              placeholder="Your description"
+              id="description"
+              value={description}
+              placeholder={"Your description"}
               onChange={(e) => setDescription(e.target.value)}
             />
           </FormGroup>
@@ -136,15 +139,15 @@ const toggle = () => setOpen(!dropdownOpen);
               onChange={(e) => setSport(e.target.value)}
             />
           </FormGroup> */}
-			<FormGroup>
-			<Label>type </Label>
+          <FormGroup>
+            <Label>type </Label>
             <ButtonDropdown isOpen={dropdownOpen} toggle={toggle}>
               <DropdownToggle caret value={sport} color="primary">{sport}</DropdownToggle>
               <DropdownMenu>
-				 <DropdownItem header>SPORT</DropdownItem>
-                <DropdownItem  onClick={()=>sportEventHandler("camisas")}>camisas</DropdownItem>
-                <DropdownItem  onClick={()=>sportEventHandler("remeras")}>remeras</DropdownItem>
-                <DropdownItem  onClick={()=>sportEventHandler("pantalones")}>pantalones</DropdownItem>
+                <DropdownItem header>SPORT</DropdownItem>
+                <DropdownItem onClick={() => sportEventHandler("camisas")}>camisas</DropdownItem>
+                <DropdownItem onClick={() => sportEventHandler("remeras")}>remeras</DropdownItem>
+                <DropdownItem onClick={() => sportEventHandler("pantalones")}>pantalones</DropdownItem>
               </DropdownMenu>
             </ButtonDropdown>
           </FormGroup>
@@ -152,8 +155,10 @@ const toggle = () => setOpen(!dropdownOpen);
             <Label>Price</Label>
             <Input
               type="text"
-              name="price"
-              placeholder="Your Price"
+            
+              id="price"
+              value={price}
+              placeholder={"Your Price"}
               onChange={(e) => setPrice(e.target.value)}
             />
           </FormGroup>
@@ -161,8 +166,9 @@ const toggle = () => setOpen(!dropdownOpen);
             <Label>Date</Label>
             <Input
               type="date"
-              name="date"
-              placeholder="Your date"
+              id="date"
+              value={date}
+              placeholder={"Your date"}
               onChange={(e) => setDate(e.target.value)}
             />
           </FormGroup>
@@ -175,5 +181,3 @@ const toggle = () => setOpen(!dropdownOpen);
     </Fragment>
   );
 };
-
-export default EventPage;
