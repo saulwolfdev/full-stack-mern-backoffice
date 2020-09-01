@@ -32,7 +32,7 @@ export default function EventPage({ history }) {
     return thumbnail ? URL.createObjectURL(thumbnail) : null;
   }, [thumbnail]);
 
-  const handleSubmit = async (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
 
     const user_id = localStorage.getItem("user");
@@ -56,12 +56,15 @@ export default function EventPage({ history }) {
           thumbnail !== null
       ) {
         await api.post("/event", eventData, { headers: { user_id } })
+        console.log("eeeeee")
         setSuccess(true)
         setTimeout(() => {
+          console.log("eeeeee")
           setSuccess(false)
           history.push("/")
         }, 2000);
       } else {
+        console.log("eeeeee")
         setError(true)
         setTimeout(() => {
           setError(false)
@@ -69,7 +72,7 @@ export default function EventPage({ history }) {
       }
     } catch (error) {
       Promise.reject(error);
-      console.log("error in create event", error);
+      console.log("ERROR AL CREAR UN EVENTO", error);
     }
   };
 
@@ -82,7 +85,7 @@ export default function EventPage({ history }) {
         <p>
           Please <strong>Login</strong> into your account
         </p>
-        <Form onSubmit={handleSubmit} className="form">
+        <Form onSubmit={submitHandler} className="form">
           {error ? (<div className="event-validation" color="danger">Missing required information</div>) : ("")}
           {success ? (<div className="event-validation" color="danger">The evente was created successfully</div>) : ("")}
           <FormGroup>

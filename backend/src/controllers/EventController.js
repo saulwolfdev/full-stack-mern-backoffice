@@ -21,10 +21,10 @@ module.exports = {
                 thumbnail: filename,
                 date
             })
-
+			console.log("event ok ",event)
             return res.json(event);
         } catch (error) {
-            return res.status(400).json({ message: error })
+            return res.status(400).json({ message: `error al crear un evento ${error}`})
         }
 	},
 	async getDeleteEvents(req, res) {
