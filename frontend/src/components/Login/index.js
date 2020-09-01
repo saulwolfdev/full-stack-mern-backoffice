@@ -13,10 +13,12 @@ const Login = ({ history }) => {
 
     const response = await api.post("/login", { email, password });
     console.log(response);
-    const userId = response.data._id || false;
+    const user_id = response.data.user_id || false;
+    const user = response.data.user || false;
     try {
-      if (userId) {
-        localStorage.setItem("user", userId);
+      if (user&&user_id) {
+        localStorage.setItem("user", user);
+        localStorage.setItem("user_id", user_id);
         history.push("/");
         console.log("login OK");
       } else {

@@ -17,10 +17,12 @@ import api from "../../services/api";
 
 const Dashboard = ({history}) => {
   const [events, setEvents] = useState([]);
-  const user_id = localStorage.getItem("user");
+  const user = localStorage.getItem("user");
+  const user_id = localStorage.getItem("user_id");
   const [rSelected, seRSelected] = useState(null);
   const [error, setError] = useState(false)
   const [success, setSuccess] = useState(false)
+  
   useEffect(() => {
     getEvents()
   }, []);
@@ -31,22 +33,32 @@ const Dashboard = ({history}) => {
  }
   
  const myEventsHandlers= async()=>{
-  seRSelected("myevents")
-  const response=await api.get("/user/events",{headers:{user_id}})
-  setEvents(response.data)
+   try {
+    seRSelected("myevents")
+    const response=await api.get("/user/events",{headers:{user:user}})
+    setEvents(response.data.events)
+   } catch (error) {
+    history.push("/login")
+   }
+
  }
 
   const getEvents = async (filter) => {
-    const url = filter ? `/dashboard/${filter}` : "/dashboard";
-    const response = await api.get(url, { headers: { user_id } });
-    setEvents(response.data);
+      try {
+        const url = filter ? `/dashboard/${filter}` : "/dashboard";
+        const response = await api.get(url, { headers: { user:user } });
+        console.log(response.data.events)
+        setEvents(response.data.events);
+      } catch (error) {
+          history.push("/login")
+      }
   };
 
 const deleteEventHandler=async(eventId)=>{
 
 
     try {
-      await api.delete(`/event/${eventId}`)
+      await api.delete(`/event/${eventId}`,{ headers: { user:user } })
       setSuccess(true)
   
       setTimeout(() => {

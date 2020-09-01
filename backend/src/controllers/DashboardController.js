@@ -1,41 +1,64 @@
 import Event from "../models/Event";
-
+const jwt=require("jsonwebtoken");
 module.exports = {
-	async getEventById(req, res) {
-		const { eventId } = req.params;
-		try {
-			const event = await Event.findById(eventId);
-			if (event) {
-				return res.json(event);
+	getEventById(req, res) {
+		jwt.verify(req.token,"secret",async(err,authData)=>{
+			if(err){
+				res.sendStatus(401)	
+			}else{
+				const { eventId } = req.params;
+				try {
+					const events = await Event.findById(eventId);
+					if (events) {
+						return res.json({authData:authData,events:events});
+					}
+				} catch (error) {
+					return res.status(400).json({ message: "EventId does not exist" });
+				}
 			}
-		} catch (error) {
-			return res.status(400).json({ message: "EventId does not exist" });
-		}
+		})
+
 	},
-	async getAllEvents(req, res) {
-        const { sport } = req.params;
-        const query = sport ? { sport } : {}
-
-        try {
-            const events = await Event.find(query)
-
-            if (events) {
-                return res.json(events)
-            }
-        } catch (error) {
-            return res.status(400).json({ message: 'We do have any events yet' })
-        }
-    },
-	async getEventByUserId(req, res) {
-		const {user_id}=req.headers;
-		try {
-			const events = await Event.find({user:user_id});
-			if (events) {
-				return res.json(events);
+	 getAllEvents(req, res) {
+		jwt.verify(req.token,"secret",async(err,authData)=>{
+			if(err){
+				res.sendStatus(401)	
+			}else{
+				//console.log("this is token =>",req.token)
+				const { sport } = req.params;
+				const query = sport ? { sport } : {}
+		
+				try {
+					const events = await Event.find(query)
+		
+					if (events) {
+						return res.json({authData,events})
+					}
+				} catch (error) {
+					return res.status(400).json({ message: 'We do have any events yet' })
+				}
 			}
-		} catch (error) {
-			return res.status(400).json({ message:`we do have any events witdh the user:id: ${user_id}`});
-		}
+		})
+
+    },
+	getEventByUserId(req, res) {
+
+		jwt.verify(req.token,"secret",async(err,authData)=>{
+				if (err) {
+					res.sendStatus(401)	
+				} else {
+					const {user_id}=req.headers;
+					try {
+						const events = await Event.find({user:authData.user._id});
+						if (events) {
+							return res.json(authData,events);
+						}
+					} catch (error) {
+						return res.status(400).json({ message:`we do have any events witdh the user:id: ${user_id}`});
+					}
+				}
+		})
+
 	}
 };
 

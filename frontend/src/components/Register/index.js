@@ -26,9 +26,11 @@ const Register = ({ history }) => {
         lastName,
       });
       console.log(response);
-      const userId = response.data._id || false;
-      if (userId) {
-        localStorage.setItem("user", userId);
+      const user= response.data.user || false;
+      const user_id = response.data.user_id|| false;
+      if (user&&user_id) {
+        localStorage.setItem("user", user);
+        localStorage.setItem("user_id", user_id);
         history.push("/");
       } else {
         const { message } = response.data;
