@@ -34,7 +34,7 @@ module.exports = {
 			console.log("event, delete")
 			return res.status(204).json({ message: "Event deleted" });
 		} catch (error) {
-			return res.status(404).json({
+			return res.status(400).json({
 				message: "we do have any events with ID"
 			});
 		}

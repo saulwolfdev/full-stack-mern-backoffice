@@ -18,19 +18,22 @@ import api from "../../services/api";
 const Dashboard = ({history}) => {
   const [events, setEvents] = useState([]);
   const user_id = localStorage.getItem("user");
-//    const [cSelected, setCSelected] = useState([]);
-	const [rSelected, setSelected] = useState(null);
+  const [rSelected, seRSelected] = useState(null);
+  const [error, setError] = useState(false)
+  const [success, setSuccess] = useState(false)
   useEffect(() => {
-    getEvents();
+    getEvents()
   }, []);
 
  const filterHandler=(query)=>{
-	 setSelected(query)
+	 seRSelected(query)
 	 getEvents(query)
  }
   
- const myEventsHandlers=(query)=>{
-  setSelected("myEvents")
+ const myEventsHandlers= async()=>{
+  seRSelected("myevents")
+  const response=await api.get("/user/events",{headers:{user_id}})
+  setEvents(response.data)
  }
 
   const getEvents = async (filter) => {
@@ -38,6 +41,28 @@ const Dashboard = ({history}) => {
     const response = await api.get(url, { headers: { user_id } });
     setEvents(response.data);
   };
+
+const deleteEventHandler=async(eventId)=>{
+
+
+    try {
+      await api.delete(`/event/${eventId}`)
+      setSuccess(true)
+  
+      setTimeout(() => {
+        setSuccess(false)
+        filterHandler(null)
+
+      }, 2000);
+    } catch (error) {
+      setError(true)
+      setTimeout(() => {
+        setError(false)
+      }, 2000);
+    }
+}
+
+
   console.log("list ", events);
   return (
     <Fragment>
@@ -46,8 +71,8 @@ const Dashboard = ({history}) => {
 				<Button color="primary" onClick={() => filterHandler(null)} active={rSelected===null}>All Sports</Button>
 				<Button color="primary" onClick={() => filterHandler("remeras")} active={rSelected==="remeras"}>remeras</Button>
 				<Button color="primary" onClick={() => filterHandler("pantalones")} active={rSelected==="pantalones"}>pantalones</Button>
-				<Button color="primary" onClick={() => filterHandler("camisas")} active={rSelected==="camisas"}>camisas</Button>
-        <Button color="primary" onClick={() => myEventsHandlers("camisas")} active={rSelected==="myEvents"}>my event</Button>
+        <Button color="primary" onClick={() => filterHandler("camisas")} active={rSelected==="camisas"}>camisas</Button>
+        <Button color="primary" onClick={() => myEventsHandlers} active={rSelected==="myevents"}>myevents</Button>
 				<Button color="secondary" onClick={()=>history.push("event")}>Events</Button>
 		</ButtonGroup>
 		 
@@ -56,6 +81,9 @@ const Dashboard = ({history}) => {
             return (
               <Col key={event._id} sm="3">
                 <Card style={{marginBottom:"15px"}}>
+                  <header  style={{ backgroundImage: `url(${event.thumbnail_url})` }}>
+                {(event.user===user_id? <Button color="danger" size="sm" onClick={() => deleteEventHandler(event._id)}>delete</Button>:"")}
+                  </header>
                   <CardImg
                     top
                     width="100%"
@@ -76,6 +104,8 @@ const Dashboard = ({history}) => {
               </Col>
             );
           })}
+          {error ? (<div className="event-validation" color="danger">error when delete event</div>) : ("")}
+          {success ? (<div className="event-validation" color="danger">The deleted successfully</div>) : ("")}
         </Row>
       </Container>
     </Fragment>

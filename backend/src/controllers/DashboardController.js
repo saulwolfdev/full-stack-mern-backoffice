@@ -13,17 +13,28 @@ module.exports = {
 		}
 	},
 	async getAllEvents(req, res) {
-		const { sport } = req.params;
-		// const query = { sport } || {};
-		const query = (sport)?{sport}:{};
+        const { sport } = req.params;
+        const query = sport ? { sport } : {}
+
+        try {
+            const events = await Event.find(query)
+
+            if (events) {
+                return res.json(events)
+            }
+        } catch (error) {
+            return res.status(400).json({ message: 'We do have any events yet' })
+        }
+    },
+	async getEventByUserId(req, res) {
+		const {user_id}=req.headers;
 		try {
-			console.log("query",query)
-			const events = await Event.find(query);
+			const events = await Event.find({user:user_id});
 			if (events) {
 				return res.json(events);
 			}
 		} catch (error) {
-			return res.status(400).json({ message: "we do have any events yet" });
+			return res.status(400).json({ message:`we do have any events witdh the user:id: ${user_id}`});
 		}
 	}
 };
