@@ -1,6 +1,6 @@
-import React, { Fragment, useState,useEffect, useMemo } from "react";
-import api from "../../services/api";
-import camera from "../../assets/camera.png";
+import React, { , useState, useEffect, useMemo } from 'react';
+import api from '../../services/api';
+import camera from '../../assets/camera.png';
 import {
   Container,
   Button,
@@ -12,27 +12,27 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-} from "reactstrap";
+} from 'reactstrap';
 
-import "./EventPage.css";
+import './EventPage.css';
 export default function EventPage({ history }) {
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [price, setPrice] = useState("")
-  const [sport, setSport] = useState("Sport")
-  const [thumbnail, setThumbnail] = useState(null)
-  const [date, setDate] = useState("")
-  const [error, setError] = useState(false)
-  const [success, setSuccess] = useState(false)
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [sport, setSport] = useState('Sport');
+  const [thumbnail, setThumbnail] = useState(null);
+  const [date, setDate] = useState('');
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [dropdownOpen, setOpen] = useState(false);
 
-  const user = localStorage.getItem("user");
+  const user = localStorage.getItem('user');
 
-  useEffect(()=>{
-    if(!user){
-      history.push("/login")
+  useEffect(() => {
+    if (!user) {
+      history.push('/login');
     }
-  },[])
+  }, []);
   const toggle = () => setOpen(!dropdownOpen);
 
   const preview = useMemo(() => {
@@ -42,74 +42,82 @@ export default function EventPage({ history }) {
   const submitHandler = async (e) => {
     e.preventDefault();
 
- 
-
     const eventData = new FormData();
 
-    eventData.append("title", title)
-    eventData.append("description", description)
-    eventData.append("price", price)
-    eventData.append("sport", sport)
-    eventData.append("thumbnail", thumbnail)
-    eventData.append("date", date)
+    eventData.append('title', title);
+    eventData.append('description', description);
+    eventData.append('price', price);
+    eventData.append('sport', sport);
+    eventData.append('thumbnail', thumbnail);
+    eventData.append('date', date);
 
     try {
       if (
-          title !== "" &&
-          description !== "" &&
-          price !== "" &&
-          sport !== "Sport" &&
-          date !== "" &&
-          thumbnail !== null
+        title !== '' &&
+        description !== '' &&
+        price !== '' &&
+        sport !== 'Sport' &&
+        date !== '' &&
+        thumbnail !== null
       ) {
-        await api.post("/event", eventData, { headers: { user} })
-      
-        setSuccess(true)
+        await api.post('/event', eventData, { headers: { user } });
+
+        setSuccess(true);
         setTimeout(() => {
-        
-          setSuccess(false)
-          history.push("/")
+          setSuccess(false);
+          history.push('/');
         }, 2000);
       } else {
-        
-        setError(true)
+        setError(true);
         setTimeout(() => {
-          setError(false)
-        }, 2000)
+          setError(false);
+        }, 2000);
       }
     } catch (error) {
       Promise.reject(error);
-      console.log("ERROR AL CREAR UN EVENTO", error);
+      console.log('ERROR AL CREAR UN EVENTO', error);
     }
   };
 
-  const sportEventHandler = (sport) =>setSport(sport)
+  const sportEventHandler = (sport) => setSport(sport);
 
-      
-  return (<Fragment>
+  return (
+    <>
       <Container>
         <h2>Create your Event</h2>
         <p>
           Please <strong>Login</strong> into your account
         </p>
-        <Form onSubmit={submitHandler} className="form">
-          {error ? (<div className="event-validation" color="danger">Missing required information</div>) : ("")}
-          {success ? (<div className="event-validation" color="danger">The evente was created successfully</div>) : ("")}
+        <Form onSubmit={submitHandler} className='form'>
+          {error ? (
+            <div className='event-validation' color='danger'>
+              Missing required information
+            </div>
+          ) : (
+            ''
+          )}
+          {success ? (
+            <div className='event-validation' color='danger'>
+              The evente was created successfully
+            </div>
+          ) : (
+            ''
+          )}
           <FormGroup>
             <Label>Upload Image: </Label>
             <Label
-              id="thumbnail"
+              id='thumbnail'
               style={{ backgroundImage: `url(${preview})` }}
-              className={thumbnail ? "has-thumbnail" : ""}
+              className={thumbnail ? 'has-thumbnail' : ''}
             >
               <Input
-                type="file"
+                type='file'
                 onChange={(e) => setThumbnail(e.target.files[0])}
               />
               <img
                 src={camera}
-                style={{ maxWidth: "50px" }}
-                alt="upload icon image"
+                style={{ maxWidth: '50px' }}
+                alt='upload icon image'
               />
             </Label>
           </FormGroup>
@@ -127,34 +135,42 @@ export default function EventPage({ history }) {
             </DropdownMenu>
           </ButtonDropdown>
         </FormGroup>**/}
-                <FormGroup>
+          <FormGroup>
             <ButtonDropdown isOpen={dropdownOpen} toggle={toggle}>
-                <Button id="caret" value={sport} disabled>{sport}</Button>
-                <DropdownToggle caret />
-                <DropdownMenu>
-                     <DropdownItem onClick={() => sportEventHandler('camisas')}>camisas</DropdownItem>
-                    <DropdownItem onClick={() => sportEventHandler('remeras')}>remeras</DropdownItem>
-                    <DropdownItem onClick={() => sportEventHandler('pantalones')}>pantalones</DropdownItem>
-                </DropdownMenu>
+              <Button id='caret' value={sport} disabled>
+                {sport}
+              </Button>
+              <DropdownToggle caret />
+              <DropdownMenu>
+                <DropdownItem onClick={() => sportEventHandler('camisas')}>
+                  camisas
+                </DropdownItem>
+                <DropdownItem onClick={() => sportEventHandler('remeras')}>
+                  remeras
+                </DropdownItem>
+                <DropdownItem onClick={() => sportEventHandler('pantalones')}>
+                  pantalones
+                </DropdownItem>
+              </DropdownMenu>
             </ButtonDropdown>
-        </FormGroup>
+          </FormGroup>
           <FormGroup>
             <Label>Title</Label>
             <Input
-              type="text"
-              id="title"
+              type='text'
+              id='title'
               value={title}
-              placeholder={"Your title"}
+              placeholder={'Your title'}
               onChange={(e) => setTitle(e.target.value)}
             />
           </FormGroup>
           <FormGroup>
             <Label>Description</Label>
             <Input
-              type="text"
-              id="description"
+              type='text'
+              id='description'
               value={description}
-              placeholder={"Your description"}
+              placeholder={'Your description'}
               onChange={(e) => setDescription(e.target.value)}
             />
           </FormGroup>
@@ -171,28 +187,29 @@ export default function EventPage({ history }) {
           <FormGroup>
             <Label>Price</Label>
             <Input
-              type="text"
-              id="price"
+              type='text'
+              id='price'
               value={price}
-              placeholder={"Your Price"}
+              placeholder={'Your Price'}
               onChange={(e) => setPrice(e.target.value)}
             />
           </FormGroup>
           <FormGroup>
             <Label>Date</Label>
             <Input
-              type="date"
-              id="date"
+              type='date'
+              id='date'
               value={date}
-              placeholder={"Your date"}
+              placeholder={'Your date'}
               onChange={(e) => setDate(e.target.value)}
             />
           </FormGroup>
-          <Button color="primary">Submit</Button>
-          <Button color="secondary" onClick={() => history.push("/")}>
+          <Button color='primary'>Submit</Button>
+          <Button color='secondary' onClick={() => history.push('/')}>
             Cancel
           </Button>
         </Form>
       </Container>
-    </Fragment>);
+    </>
+  );
 }

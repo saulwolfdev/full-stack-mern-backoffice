@@ -1,5 +1,5 @@
-import React, { Fragment, useEffect, useState } from "react";
-import moment from "moment";
+import React, { Fragment, useEffect, useState } from 'react';
+import moment from 'moment';
 import {
   Container,
   Row,
@@ -12,112 +12,170 @@ import {
   CardSubtitle,
   Button,
   ButtonGroup,
-} from "reactstrap";
-import api from "../../services/api";
+} from 'reactstrap';
+import api from '../../services/api';
 
-const Dashboard = ({history}) => {
+const Dashboard = ({ history }) => {
   const [events, setEvents] = useState([]);
-  const user = localStorage.getItem("user");
-  const user_id = localStorage.getItem("user_id");
+  const user = localStorage.getItem('user');
+  const user_id = localStorage.getItem('user_id');
   const [rSelected, seRSelected] = useState(null);
-  const [error, setError] = useState(false)
-  const [success, setSuccess] = useState(false)
-  
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+
   useEffect(() => {
-    getEvents()
+    getEvents();
   }, []);
 
- const filterHandler=(query)=>{
-	 seRSelected(query)
-	 getEvents(query)
- }
-  
- const myEventsHandlers= async()=>{
-   try {
-    seRSelected("myevents")
-    const response=await api.get("/user/events",{headers:{user:user}})
-    setEvents(response.data.events)
-   } catch (error) {
-    history.push("/login")
-   }
-
- }
-
-  const getEvents = async (filter) => {
-      try {
-        const url = filter ? `/dashboard/${filter}` : "/dashboard";
-        const response = await api.get(url, { headers: { user:user } });
-        console.log(response.data.events)
-        setEvents(response.data.events);
-      } catch (error) {
-          history.push("/login")
-      }
+  const filterHandler = (query) => {
+    seRSelected(query);
+    getEvents(query);
   };
 
-const deleteEventHandler=async(eventId)=>{
+  const myEventsHandlers = async () => {
+    try {
+      seRSelected('myevents');
+      const response = await api.get('/user/events', {
+        headers: { user },
+      });
+      setEvents(response.data.events);
+    } catch (error) {
+      history.push('/login');
+    }
+  };
 
+  const getEvents = async (filter) => {
 
     try {
-      await api.delete(`/event/${eventId}`,{ headers: { user:user } })
-      setSuccess(true)
-  
-      setTimeout(() => {
-        setSuccess(false)
-        filterHandler(null)
+      const url = filter ? `/dashboard/${filter}` : '/dashboard';
+      const response = await api.get(url, { headers: { user } });
+      console.log(response.data.events);
+      setEvents(response.data.events);
 
+    } catch () {
+      history.push('/login');
+    }
+  };
+
+  const deleteEventHandler = async (eventId) => {
+    try {
+      await api.delete(`/event/${eventId}`, { headers: { user: user } });
+      setSuccess(true);
+
+      setTimeout(() => {
+        setSuccess(false);
+        filterHandler(null);
       }, 2000);
     } catch (error) {
-      setError(true)
+      setError(true);
       setTimeout(() => {
-        setError(false)
+        setError(false);
       }, 2000);
     }
-}
+  };
 
-
-  console.log("list ", events);
+  console.log('list ', events);
   return (
     <Fragment>
       <Container>
-		<ButtonGroup>
-				<Button color="primary" onClick={() => filterHandler(null)} active={rSelected===null}>All Sports</Button>
-				<Button color="primary" onClick={() => filterHandler("remeras")} active={rSelected==="remeras"}>remeras</Button>
-				<Button color="primary" onClick={() => filterHandler("pantalones")} active={rSelected==="pantalones"}>pantalones</Button>
-        <Button color="primary" onClick={() => filterHandler("camisas")} active={rSelected==="camisas"}>camisas</Button>
-        <Button color="primary" onClick={() => myEventsHandlers} active={rSelected==="myevents"}>myevents</Button>
-				<Button color="secondary" onClick={()=>history.push("event")}>Events</Button>
-		</ButtonGroup>
-		 
+        <ButtonGroup>
+          <Button
+            color='primary'
+            onClick={() => filterHandler(null)}
+            active={rSelected === null}
+          >
+            All Sports
+          </Button>
+          <Button
+            color='primary'
+            onClick={() => filterHandler('remeras')}
+            active={rSelected === 'remeras'}
+          >
+            remeras
+          </Button>
+          <Button
+            color='primary'
+            onClick={() => filterHandler('pantalones')}
+            active={rSelected === 'pantalones'}
+          >
+            pantalones
+          </Button>
+          <Button
+            color='primary'
+            onClick={() => filterHandler('camisas')}
+            active={rSelected === 'camisas'}
+          >
+            camisas
+          </Button>
+          <Button
+            color='primary'
+            onClick={() => myEventsHandlers}
+            active={rSelected === 'myevents'}
+          >
+            myevents
+          </Button>
+          <Button color='secondary' onClick={() => history.push('event')}>
+            Events
+          </Button>
+        </ButtonGroup>
+
         <Row>
           {events.map((event) => {
             return (
-              <Col key={event._id} sm="3">
-                <Card style={{marginBottom:"15px"}}>
-                  <header  style={{ backgroundImage: `url(${event.thumbnail_url})` }}>
-                {(event.user===user_id? <Button color="danger" size="sm" onClick={() => deleteEventHandler(event._id)}>delete</Button>:"")}
+              <Col key={event._id} sm='3'>
+                <Card style={{ marginBottom: '15px' }}>
+                  <header
+                    style={{ backgroundImage: `url(${event.thumbnail_url})` }}
+                  >
+                    {event.user === user_id ? (
+                      <Button
+                        color='danger'
+                        size='sm'
+                        onClick={() => deleteEventHandler(event._id)}
+                      >
+                        delete
+                      </Button>
+                    ) : (
+                      ''
+                    )}
                   </header>
                   <CardImg
                     top
-                    width="100%"
-                    style={{diplay:"block"}}
+                    width='100%'
+                    style={{ diplay: 'block' }}
                     src={event.thumbnail_url}
-                    alt={event.title}/>
+                    alt={event.title}
+                  />
                   <CardBody>
                     <CardTitle>{event.title}</CardTitle>
                     <CardSubtitle>
                       {parseFloat(event.price).toFixed(2)}
                     </CardSubtitle>
                     <CardText>{event.description}</CardText>
-					<CardText>{event.sport}</CardText>
-                    <CardText>{moment(event.date).format("L")}</CardText>
-                    <Button color="primary" style={{width:"100%"}}>Pay</Button>
+                    <CardText>{event.sport}</CardText>
+                    <CardText>{moment(event.date).format('L')}</CardText>
+                    <Button color='primary' style={{ width: '100%' }}>
+                      Pay
+                    </Button>
                   </CardBody>
                 </Card>
               </Col>
             );
           })}
-          {error ? (<div className="event-validation" color="danger">error when delete event</div>) : ("")}
-          {success ? (<div className="event-validation" color="danger">The deleted successfully</div>) : ("")}
+          {error ? (
+            <div className='event-validation' color='danger'>
+              error when delete event
+            </div>
+          ) : (
+            ''
+          )}
+          {success ? (
+            <div className='event-validation' color='danger'>
+              The deleted successfully
+            </div>
+          ) : (
+            ''
+          )}
         </Row>
       </Container>
     </Fragment>
